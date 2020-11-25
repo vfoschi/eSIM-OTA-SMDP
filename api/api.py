@@ -35,10 +35,30 @@ def columns(tablename):
 def add_user():
     obj = request.get_json()
     # if not request.form['imsi'] or not request.form['msisdn'] or not request.form['imei']:
-    if 'imsi' not in obj or 'msisdn' not in obj or 'imei' not in obj:
+    if 'imsi' not in obj or 'msisdn' not in obj or 'imei' not in obj or 'sqn' not in obj or 'rand' not in obj:
         print('missing arguments')
         return "error"
-    return add_User(obj['imsi'], obj['msisdn'], obj['imei'])
+    return add_User(obj['imsi'], obj['msisdn'], obj['imei'], obj['sqn'], obj['rand'])
+
+
+@app.route('/api/db/deleteuser', methods=['POST'])
+def delete_user():
+    obj = request.get_json()
+    # if not request.form['imsi'] or not request.form['msisdn'] or not request.form['imei']:
+    if 'imsi' not in obj:
+        print('missing arguments')
+        return "error"
+    return delete_User(obj['imsi'])
+
+
+@app.route('/api/db/updateuser', methods=['POST'])
+def update_user():
+    obj = request.get_json()
+    # if not request.form['imsi'] or not request.form['msisdn'] or not request.form['imei']:
+    if 'imsi' not in obj or 'imei' not in obj:
+        print('missing arguments')
+        return "error"
+    return update_User(obj['imsi'], obj['imei'])
 
 
 def connect_to_db():
@@ -85,12 +105,52 @@ def get_Columns(tablename):
         connection.close()
     return json.dumps(columns)
 
-def add_User(imsi, msisdn, imei):
+
+def add_User(imsi, msisdn, imei, sqn, rand):
     connection = connect_to_db()
     failed = False
     try:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO `users` (`imsi`, `msisdn`, `imei`) VALUES (%s, %s, %s)", (imsi, msisdn, imei))
+            cursor.execute(
+                "INSERT INTO `users` (`imsi`, `msisdn`, `imei`, `sqn`, `rand`) VALUES (%s, %s, %s, %s, %s)", (imsi, msisdn, imei, sqn, rand))
+        connection.commit()
+    except Exception as inst:
+        print('type of exception:')
+        print(type(inst))
+        print('exception text:')
+        print(inst)
+        failed = True
+    finally:
+        connection.close()
+    return 'error' if failed else 'success'
+
+
+def delete_User(imsi):
+    connection = connect_to_db()
+    failed = False
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM `users` WHERE `imsi` = %s", (imsi,))
+        connection.commit()
+    except Exception as inst:
+        print('type of exception:')
+        print(type(inst))
+        print('exception text:')
+        print(inst)
+        failed = True
+    finally:
+        connection.close()
+    return 'error' if failed else 'success'
+
+
+def update_User(imsi, newImei):
+    connection = connect_to_db()
+    failed = False
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE `users` SET `imei` = %s WHERE `imsi` = %s", (newImei, imsi))
         connection.commit()
     except Exception as inst:
         print('type of exception:')
