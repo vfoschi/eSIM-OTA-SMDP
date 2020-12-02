@@ -9,23 +9,23 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import axios from "axios";
+import { useRouteRefresh } from "../../utils";
 
 export default function DeleteUser() {
   const [open, setOpen] = React.useState(false);
   const [imsi, setImsi] = React.useState("");
-  const [sent, setSent] = React.useState(false);
+  const refreshRoute = useRouteRefresh();
 
   const handleClickOpen = () => {
     setImsi("");
     setOpen(true);
-    setSent(false);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
+  const handleDelete = async () => {
     try {
       if (imsi === "") {
         throw new Error("can't do no input");
@@ -36,7 +36,8 @@ export default function DeleteUser() {
     } catch (err) {
       console.log("err when deleteUser is: " + err);
     }
-    setSent(true);
+    setOpen(false);
+    refreshRoute();
   };
 
   return (
@@ -50,9 +51,7 @@ export default function DeleteUser() {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Delete a user</DialogTitle>
-        {sent ? (
-          "Sent!"
-        ) : (
+        {
           <div>
             <DialogContent>
               <DialogContentText>imsi:</DialogContentText>
@@ -69,12 +68,12 @@ export default function DeleteUser() {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleAdd} color="primary">
+              <Button onClick={handleDelete} color="primary">
                 Delete
               </Button>
             </DialogActions>
           </div>
-        )}
+        }
       </Dialog>
     </div>
   );

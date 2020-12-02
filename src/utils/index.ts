@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const useGetTableAPI = (
@@ -53,4 +54,13 @@ const useGetColumnsAPI = (
   return [data, isLoading, isError];
 };
 
-export { useGetTableAPI, useGetColumnsAPI };
+function useRouteRefresh() {
+  const history = useHistory();
+  const forceRefresh = () => {
+    history.push({ pathname: "/empty" });
+    history.goBack();
+  };
+  return forceRefresh;
+}
+
+export { useGetTableAPI, useGetColumnsAPI, useRouteRefresh };

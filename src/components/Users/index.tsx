@@ -7,6 +7,7 @@ import { useGetTableAPI, useGetColumnsAPI } from "../../utils";
 import AddUser from "./adduser";
 import DeleteUser from "./deleteuser";
 import UpdateUser from "./updateuser";
+import QueueUpdate from "./queueupdate";
 
 export default function Users() {
   const [users, isLoading, isError] = useGetTableAPI("/api/db/table/users");
@@ -51,6 +52,9 @@ export default function Users() {
         </Grid>
         <Grid item>
           <UpdateUser />
+        </Grid>
+        <Grid item>
+          <QueueUpdate />
         </Grid>
         <Grid item>
           <DeleteUser />
