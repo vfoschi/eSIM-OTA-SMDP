@@ -2,10 +2,15 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
+import { Grid } from "@material-ui/core";
 import { useGetTableAPI, useGetColumnsAPI } from "../../utils";
-export default function PDNs() {
-  const [pdns, isLoading, isError] = useGetTableAPI("pdn");
-  const [cols, isColsLoading, isColsError] = useGetColumnsAPI("pdn");
+
+export default function UpdateQueue() {
+  const [users, isLoading, isError] = useGetTableAPI(
+    "updatequeue"
+  );
+  const [cols, isColsLoading, isColsError] = useGetColumnsAPI("updatequeue");
+
   if (isColsLoading || isLoading) {
     return <CircularProgress />;
   }
@@ -22,20 +27,30 @@ export default function PDNs() {
     width: 200,
   }));
 
-  const rows: RowsProp = pdns.map((pdn, index) => {
+  const rows: RowsProp = users.map((user, index) => {
     let rowObj: { [colName: string]: string; id: string } = { id: index + "" };
     for (let colIndex in cols) {
       const colName = "col" + colIndex;
-      rowObj[colName] = pdn[colIndex];
+      rowObj[colName] = user[colIndex];
     }
     return rowObj;
   });
   return (
-    <div style={{ height: 800, width: "100%" }}>
-      <Typography variant="body1">
-        All PDNs: <br />
-      </Typography>
-      <DataGrid rows={rows} columns={columns} />
+    <div>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant="body1">
+            Update Queue for users: <br />
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12}>
+          <div style={{ height: 800, width: "100%" }}>
+            <DataGrid rows={rows} columns={columns} />
+          </div>
+        </Grid>
+      </Grid>
     </div>
   );
 }

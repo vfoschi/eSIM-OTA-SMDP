@@ -11,12 +11,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
-import CloudDownloadOutlinedIcon from '@material-ui/icons/CloudDownloadOutlined';
-import QueueMusicOutlinedIcon from '@material-ui/icons/QueueMusicOutlined';
-import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
-import WhatshotOutlinedIcon from '@material-ui/icons/WhatshotOutlined';
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import routesJSON from '../constants/routes.json';
 
 const drawerWidth = 240;

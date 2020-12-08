@@ -8,9 +8,10 @@ import AddUser from "./adduser";
 import DeleteUser from "./deleteuser";
 import UpdateUser from "./updateuser";
 import QueueUpdate from "./queueupdate";
+import LocationActive from './locationactive';
 
 export default function Users() {
-  const [users, isLoading, isError] = useGetTableAPI("/api/db/table/users");
+  const [users, isLoading, isError] = useGetTableAPI("users");
   const [cols, isColsLoading, isColsError] = useGetColumnsAPI("users");
 
   if (isColsLoading || isLoading) {
@@ -55,6 +56,9 @@ export default function Users() {
         </Grid>
         <Grid item>
           <QueueUpdate />
+        </Grid>
+        <Grid item>
+          <LocationActive />
         </Grid>
         <Grid item>
           <DeleteUser />

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const useGetTableAPI = (
-  url: string
+  tableName: string
 ): [Array<Array<string>>, boolean, boolean] => {
   const [data, setData] = useState([[""]]);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +14,7 @@ const useGetTableAPI = (
       setIsError(false);
       setIsLoading(true);
       try {
-        const res = await axios.get(url);
+        const res = await axios.get("/api/db/table/" + tableName);
         setData(res.data);
       } catch (err) {
         console.log("err is:" + err);
@@ -24,7 +24,7 @@ const useGetTableAPI = (
     }
 
     getData();
-  }, [url]);
+  }, [tableName]);
   return [data, isLoading, isError];
 };
 

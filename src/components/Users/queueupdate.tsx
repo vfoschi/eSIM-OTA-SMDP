@@ -29,12 +29,12 @@ export default function QueueUpdate() {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
+  const handleQueue = async () => {
     try {
       if (imsi === "") {
         throw new Error("can't do no input");
       }
-      await axios.post("/api/db/updateuser", {
+      await axios.post("/api/db/updatequeue", {
         imsi,
         imei,
         active: accountActive,
@@ -56,7 +56,7 @@ export default function QueueUpdate() {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Update a user</DialogTitle>
+        <DialogTitle id="form-dialog-title">Queue an update for a user</DialogTitle>
         {
           <div>
             <DialogContent>
@@ -95,8 +95,8 @@ export default function QueueUpdate() {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleAdd} color="primary">
-                Update
+              <Button onClick={handleQueue} color="primary">
+                Queue
               </Button>
             </DialogActions>
           </div>

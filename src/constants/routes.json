@@ -1,6 +1,7 @@
 {
     "Home": "/",
-    "Users": "/allusers",
-    "PDNs": "/allpdns",
+    "Users": "/users",
+    "PDNs": "/pdns",
+    "Update Queue": "/updatequeue",
     "Setting": "/setting"
 }

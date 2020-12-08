@@ -6,23 +6,20 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { IconButton } from "@material-ui/core";
-// import UpdateIcon from "@material-ui/icons/Update";
-import SettingsIcon from "@material-ui/icons/Settings";
+import LocationSearchingIcon from "@material-ui/icons/LocationSearching";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import { useRouteRefresh } from "../../utils";
 
-export default function UpdateUser() {
+export default function LocationActive() {
   const [open, setOpen] = React.useState(false);
-  const [imsi, setImsi] = React.useState("");
-  const [imei, setImei] = React.useState("");
   const [accountActive, setAccountActive] = React.useState("");
+  const [location, setLocation] = React.useState("");
   const refreshRoute = useRouteRefresh();
 
   const handleClickOpen = () => {
-    setImsi("");
-    setImei("");
     setAccountActive("");
+    setLocation("");
     setOpen(true);
   };
 
@@ -30,14 +27,10 @@ export default function UpdateUser() {
     setOpen(false);
   };
 
-  const handleUpdate = async () => {
+  const handleQueue = async () => {
     try {
-      if (imsi === "") {
-        throw new Error("can't do no input");
-      }
-      await axios.post("/api/db/updateuser", {
-        imsi,
-        imei,
+      await axios.post("/api/db/locationactive", {
+        location,
         active: accountActive,
       });
     } catch (err) {
@@ -50,30 +43,24 @@ export default function UpdateUser() {
   return (
     <div>
       <IconButton onClick={handleClickOpen}>
-        <SettingsIcon />
+        <LocationSearchingIcon />
       </IconButton>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Update a user</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          Activate/Deactivate a Region
+        </DialogTitle>
         {
           <div>
             <DialogContent>
               <TextField
-                id="imsi"
-                label="imsi:"
+                label="location:"
+                id="location"
                 onChange={async (e: React.ChangeEvent<HTMLInputElement>) =>
-                  setImsi(e.target.value)
-                }
-                fullWidth
-              />
-              <TextField
-                id="imei"
-                label="imei:"
-                onChange={async (e: React.ChangeEvent<HTMLInputElement>) =>
-                  setImei(e.target.value)
+                  setLocation(e.target.value)
                 }
                 fullWidth
               />
@@ -96,8 +83,8 @@ export default function UpdateUser() {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleUpdate} color="primary">
-                Update
+              <Button onClick={handleQueue} color="primary">
+                Queue
               </Button>
             </DialogActions>
           </div>

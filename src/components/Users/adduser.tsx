@@ -16,7 +16,8 @@ export default function AddUser() {
   const [imsi, setImsi] = React.useState("");
   const [msisdn, setMsisdn] = React.useState("");
   const [imei, setImei] = React.useState("");
-  const [accountActive, setAccountActive] = React.useState(0);
+  const [accountActive, setAccountActive] = React.useState("");
+  const [location, setLocation] = React.useState("");
   const [sqn, setSqn] = React.useState(0);
   const [rand, setRand] = React.useState("");
   const refreshRoute = useRouteRefresh();
@@ -25,7 +26,8 @@ export default function AddUser() {
     setImsi("");
     setMsisdn("");
     setImei("");
-    setAccountActive(0);
+    setAccountActive("");
+    setLocation("");
     setSqn(0);
     setRand("");
     setOpen(true);
@@ -45,6 +47,7 @@ export default function AddUser() {
         msisdn,
         imei,
         active: accountActive,
+        location,
         sqn,
         rand,
       });
@@ -98,14 +101,22 @@ export default function AddUser() {
                 id="active"
                 select
                 label="active:"
-                onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
-                  setAccountActive(event.target.value as number);
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setAccountActive(event.target.value);
                 }}
                 fullWidth
               >
-                <MenuItem value={0}>Inactive</MenuItem>
-                <MenuItem value={1}>Active</MenuItem>
+                <MenuItem value={"0"}>Inactive</MenuItem>
+                <MenuItem value={"1"}>Active</MenuItem>
               </TextField>
+              <TextField
+                id="location"
+                label="location:"
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) =>
+                  setLocation(e.target.value)
+                }
+                fullWidth
+              />
               <TextField
                 label="sqn:"
                 id="sqn"

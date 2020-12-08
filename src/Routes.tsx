@@ -6,6 +6,7 @@ import routesJSON from "./constants/routes.json";
 import Home from "./containers/Home";
 import Users from "./components/Users";
 import PDNs from "./components/PDNs";
+import UpdateQueue from "./components/UpdateQueue";
 import Setting from "./components/Setting";
 
 interface RoutesObject {
@@ -21,6 +22,8 @@ export default function Routes() {
           <Route path={`${routes["Users"]}`} component={Users} />
 
           <Route path={`${routes["PDNs"]}`} component={PDNs} />
+
+          <Route path={`${routes["Update Queue"]}`} component={UpdateQueue} />
 
           <Route path={`${routes["Setting"]}`} component={Setting} />
 
