@@ -15,11 +15,13 @@ export default function LocationActive() {
   const [open, setOpen] = React.useState(false);
   const [accountActive, setAccountActive] = React.useState("");
   const [location, setLocation] = React.useState("");
+  const [access_restriction, setAccess_Restriction] = React.useState("");
   const refreshRoute = useRouteRefresh();
 
   const handleClickOpen = () => {
     setAccountActive("");
     setLocation("");
+    setAccess_Restriction("");
     setOpen(true);
   };
 
@@ -32,6 +34,7 @@ export default function LocationActive() {
       await axios.post("/api/db/locationactive", {
         location,
         active: accountActive,
+        access_restriction,
       });
     } catch (err) {
       console.log("err when updateUser is: " + err);
@@ -77,6 +80,15 @@ export default function LocationActive() {
                 <MenuItem value={"0"}>Inactive</MenuItem>
                 <MenuItem value={"1"}>Active</MenuItem>
               </TextField>
+              <TextField
+                label="access_restriction:"
+                id="access_restriction"
+                type="number"
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) =>
+                  setAccess_Restriction(e.target.value)
+                }
+                fullWidth
+              />
             </DialogContent>
 
             <DialogActions>

@@ -56,11 +56,14 @@ const useGetColumnsAPI = (
 
 function useRouteRefresh() {
   const history = useHistory();
-  const forceRefresh = () => {
-    history.push({ pathname: "/empty" });
-    history.goBack();
+  // const forceRefresh = () => {
+  //   history.push({ pathname: "/empty" });
+  //   history.goBack();
+  // };
+  // return forceRefresh;
+  return () => {
+    history.go(0);
   };
-  return forceRefresh;
 }
 
 export { useGetTableAPI, useGetColumnsAPI, useRouteRefresh };
