@@ -87,7 +87,7 @@ def update_User(imsi, updateObj):
             oldImei = cursor.fetchone()
             oldImei = oldImei[0] if oldImei else ''
             # Detected violation! In eSIM, an IMSI should be bound to an IMEI forever
-            if oldImei and oldImei != 'None' and oldImei != newImei:
+            if oldImei and newImei and newImei != 'None' and oldImei != 'None' and oldImei != newImei:
                 print('Detected Invalid Behavior for {imsi}. Deleted!'.format(imsi=imsi))
                 print('imei should be {oldImei} but {newImei}'.format(oldImei=oldImei, newImei=newImei))
                 cursor.execute("DELETE FROM `users` WHERE `imsi` = %s", (imsi,))

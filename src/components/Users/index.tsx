@@ -43,7 +43,7 @@ export default function Users() {
       <Grid container>
         <Grid item xs={12}>
           <Typography variant="body1">
-            All Users: <br />
+            User Profiles: <br />
           </Typography>
         </Grid>
       </Grid>
@@ -51,9 +51,9 @@ export default function Users() {
         <Grid item>
           <AddUser />
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <UpdateUser />
-        </Grid>
+        </Grid> */}
         <Grid item>
           <QueueUpdate />
         </Grid>

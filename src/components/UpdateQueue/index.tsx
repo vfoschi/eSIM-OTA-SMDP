@@ -41,7 +41,7 @@ export default function UpdateQueue() {
       <Grid container>
         <Grid item xs={12}>
           <Typography variant="body1">
-            Update Queue for users: <br />
+            Edge Server 1's update queue: <br />
           </Typography>
         </Grid>
       </Grid>
