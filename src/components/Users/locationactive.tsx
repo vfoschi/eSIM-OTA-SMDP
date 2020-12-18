@@ -15,13 +15,13 @@ export default function LocationActive() {
   const [open, setOpen] = React.useState(false);
   const [accountActive, setAccountActive] = React.useState("");
   const [location, setLocation] = React.useState("");
-  const [access_restriction, setAccess_Restriction] = React.useState("");
+  const [ue_ambr_ul, setUe_ambr_ul] = React.useState("");
   const refreshRoute = useRouteRefresh();
 
   const handleClickOpen = () => {
     setAccountActive("");
     setLocation("");
-    setAccess_Restriction("");
+    setUe_ambr_ul("");
     setOpen(true);
   };
 
@@ -31,13 +31,13 @@ export default function LocationActive() {
 
   const handleQueue = async () => {
     try {
-      await axios.post("/api/db/locationactive", {
+      await axios.post("/api/db/location", {
         location,
         active: accountActive,
-        access_restriction,
+        ue_ambr_ul,
       });
     } catch (err) {
-      console.log("err when updateUser is: " + err);
+      console.log("err when calling /api/db/location is: " + err);
     }
     setOpen(false);
     refreshRoute();
@@ -54,7 +54,7 @@ export default function LocationActive() {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          Activate/Deactivate a Region
+          Activate/Deactivate/Change AMBR_UL for a Region
         </DialogTitle>
         {
           <div>
@@ -81,11 +81,11 @@ export default function LocationActive() {
                 <MenuItem value={"1"}>Active</MenuItem>
               </TextField>
               <TextField
-                label="access_restriction:"
-                id="access_restriction"
+                label="ue_ambr_ul:"
+                id="ue_ambr_ul"
                 type="number"
                 onChange={async (e: React.ChangeEvent<HTMLInputElement>) =>
-                  setAccess_Restriction(e.target.value)
+                  setUe_ambr_ul(e.target.value)
                 }
                 fullWidth
               />

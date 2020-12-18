@@ -11,8 +11,8 @@ import QueueUpdate from "./queueupdate";
 import LocationActive from './locationactive';
 
 export default function Users() {
-  const [users, isLoading, isError] = useGetTableAPI("users");
-  const [cols, isColsLoading, isColsError] = useGetColumnsAPI("users");
+  const [users, isLoading, isError] = useGetTableAPI(`api`, "users");
+  const [cols, isColsLoading, isColsError] = useGetColumnsAPI(`api`, "users");
 
   if (isColsLoading || isLoading) {
     return <CircularProgress />;

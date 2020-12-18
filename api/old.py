@@ -17,6 +17,13 @@ app = Flask(__name__)
 
 validTables = ['users', 'pdn', 'updatequeue']
 
+@app.route('/gsma/rsp2/es9plus/initiateAuthentication', methods=['POST'])
+def initiateAuthentication():
+    obj = request.get_json()
+    print('obj in initiateAuthentication:')
+    print(obj)
+    return 
+
 # dump all data in a table
 @app.route('/api/db/table/<string:tablename>')
 def log_all(tablename):
@@ -30,6 +37,7 @@ def columns(tablename):
     if(tablename not in validTables):
         raise Exception("nonexistent tablename")
     return get_Columns(tablename)
+
 # create a user in DB
 @app.route('/api/db/adduser', methods=['POST'])
 def add_user():
@@ -61,9 +69,9 @@ def update_user():
     imei = obj['imei'] if 'imei' in obj else ''
     active = obj['active'] if 'active' in obj else ''
     location = obj['location'] if 'location' in obj else ''
-    access_restriction = obj['access_restriction'] if 'access_restriction' in obj else ''
+    ue_ambr_ul = obj['ue_ambr_ul'] if 'ue_ambr_ul' in obj else ''
     updateObj = {'imsi': imsi, 'imei': imei,
-                 'active': active, 'location': location, 'access_restriction': access_restriction}
+                 'active': active, 'location': location, 'ue_ambr_ul': ue_ambr_ul}
     print(updateObj)
     return update_User(imsi, updateObj)
 
@@ -90,9 +98,9 @@ def insert_update_queue():
     imei = obj['imei'] if 'imei' in obj else ''
     active = obj['active'] if 'active' in obj else ''
     location = obj['location'] if 'location' in obj else ''
-    access_restriction = obj['access_restriction'] if 'access_restriction' in obj else ''
+    ue_ambr_ul = obj['ue_ambr_ul'] if 'ue_ambr_ul' in obj else ''
     addedtime = time.strftime('%Y-%m-%d %H:%M:%S')
-    return insert_Update_Queue(imsi, active, location, access_restriction, addedtime)
+    return insert_Update_Queue(imsi, active, location, ue_ambr_ul, addedtime)
 
 # set all imsis in a location active/inactive
 @app.route('/api/db/locationactive', methods=['POST'])
@@ -103,8 +111,8 @@ def location_active():
         return "error"
     location = obj['location']
     active = obj['active'] if obj['active'] else ''
-    access_restriction = obj['access_restriction'] if obj['access_restriction'] else ''
-    return location_Active(location, active, access_restriction)
+    ue_ambr_ul = obj['ue_ambr_ul'] if obj['ue_ambr_ul'] else ''
+    return location_Active(location, active, ue_ambr_ul)
 
 
 def connect_to_db():
@@ -186,22 +194,21 @@ def update_User(imsi, updateObj):
     newImei = updateObj['imei']
     newActive = updateObj['active']
     newLocation = updateObj['location']
-    newAccess = updateObj['access_restriction']
-    # newAMBRUL = updateObj['ue_ambr_ul']
+    newAMBRUL = updateObj['ue_ambr_ul']
     try:
         with connection.cursor() as cursor:
             if newImei and newImei != 'None':
                 cursor.execute(
                     "UPDATE `users` SET `imei` = %s WHERE `imsi` = %s", (newImei, imsi))
-            if newActive != "None" or newActive == 0:
+            if (newActive and newActive != "None") or newActive == 0:
                 cursor.execute(
                     "UPDATE `users` SET `active` = %s WHERE `imsi` = %s", (newActive, imsi))
             if newLocation and newLocation != 'None':
                 cursor.execute(
                     "UPDATE `users` SET `location` = %s WHERE `imsi` = %s", (newLocation, imsi))
-            if newAccess and newAccess != 'None':
+            if newAMBRUL and newAMBRUL != 'None':
                 cursor.execute(
-                    "UPDATE `users` SET `access_restriction` = %s WHERE `imsi` = %s", (newAccess, imsi))
+                    "UPDATE `users` SET `ue_ambr_ul` = %s WHERE `imsi` = %s", (newAMBRUL, imsi))
         connection.commit()
     except Exception as inst:
         print_inst(inst)
@@ -211,16 +218,14 @@ def update_User(imsi, updateObj):
     return 'error' if failed else 'success'
 
 # insert into updatequeue table
-
-
-def insert_Update_Queue(imsi, active, location, access_restriction, addedtime):
+def insert_Update_Queue(imsi, active, location, ue_ambr_ul, addedtime):
     connection = connect_to_db()
     failed = False
     try:
         with connection.cursor() as cursor:
             cursor.execute(
-                "INSERT INTO `updatequeue` (`imsi`, `active`, `location`, `access_restriction`, `addedtime`) VALUES (%s, %s, %s, %s, %s)",
-                (imsi, active if active else None, location if location else None, access_restriction if access_restriction else None, addedtime))
+                "INSERT INTO `updatequeue` (`imsi`, `active`, `location`, `ue_ambr_ul`, `addedtime`) VALUES (%s, %s, %s, %s, %s)",
+                (imsi, active if active else None, location if location else None, ue_ambr_ul if ue_ambr_ul else None, addedtime))
         connection.commit()
     except Exception as inst:
         print_inst(inst)
@@ -231,22 +236,20 @@ def insert_Update_Queue(imsi, active, location, access_restriction, addedtime):
 
 # retrieve related updates from db
 # send delete if imsi not in db's queue table
-
-
 def retrieve_From_Update_Queue(imsi):
     connection = connect_to_db()
     tableData = []
     try:
         with connection.cursor() as cursor:
             cursor.execute(
-                "SELECT `imei`, `active`, `location`, `access_restriction`, `addedtime` FROM `updatequeue` WHERE `imsi` = %s AND `retrievedtime` IS NULL", (imsi))
+                "SELECT `imei`, `active`, `location`, `ue_ambr_ul`, `addedtime` FROM `updatequeue` WHERE `imsi` = %s AND `retrievedtime` IS NULL", (imsi))
             results = cursor.fetchall()
             for i in range(len(results)):
                 tableData.append({})
                 tableData[i]['imei'] = results[i][0]
                 tableData[i]['active'] = str(results[i][1])
                 tableData[i]['location'] = str(results[i][2])
-                tableData[i]['access_restriction'] = str(results[i][3])
+                tableData[i]['ue_ambr_ul'] = str(results[i][3])
                 tableData[i]['addedtime'] = str(results[i][4])
     finally:
         connection.close()
@@ -278,7 +281,7 @@ def apply_DB(imsi, updateObj):
     update_User(imsi, updateObj)
 
 
-def location_Active(location, active, access_restriction):
+def location_Active(location, active, ue_ambr_ul):
     connection = connect_to_db()
     imsis = []
     failed = False
@@ -292,7 +295,7 @@ def location_Active(location, active, access_restriction):
 
     for imsi in imsis:
         result = insert_Update_Queue(
-            imsi, active, location, access_restriction, time.strftime('%Y-%m-%d %H:%M:%S'))
+            imsi, active, location, ue_ambr_ul, time.strftime('%Y-%m-%d %H:%M:%S'))
         if result == 'error':
             print('failed for queuing changing %s to %s' % (imsi, active))
             Failed = True

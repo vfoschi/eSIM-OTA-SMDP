@@ -6,10 +6,11 @@ import { Grid } from "@material-ui/core";
 import { useGetTableAPI, useGetColumnsAPI } from "../../utils";
 
 export default function UpdateQueue() {
-  const [users, isLoading, isError] = useGetTableAPI(
+  const [users, isLoading, isError] = useGetTableAPI(`queue`, "updatequeue");
+  const [cols, isColsLoading, isColsError] = useGetColumnsAPI(
+    `queue`,
     "updatequeue"
   );
-  const [cols, isColsLoading, isColsError] = useGetColumnsAPI("updatequeue");
 
   if (isColsLoading || isLoading) {
     return <CircularProgress />;

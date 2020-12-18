@@ -4,8 +4,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
 import { useGetTableAPI, useGetColumnsAPI } from "../../utils";
 export default function PDNs() {
-  const [pdns, isLoading, isError] = useGetTableAPI("pdn");
-  const [cols, isColsLoading, isColsError] = useGetColumnsAPI("pdn");
+  const [pdns, isLoading, isError] = useGetTableAPI(`api`, "pdn");
+  const [cols, isColsLoading, isColsError] = useGetColumnsAPI(`api`, "pdn");
   if (isColsLoading || isLoading) {
     return <CircularProgress />;
   }

@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /api/venv
+/queueserver/venv
 __pycache__

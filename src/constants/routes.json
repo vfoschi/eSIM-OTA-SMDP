@@ -2,6 +2,6 @@
     "Home": "/",
     "Users": "/users",
     "PDNs": "/pdns",
-    "Update Queue": "/updatequeue",
+    "Edge Server 1": "/edgeserver1",
     "Setting": "/setting"
 }

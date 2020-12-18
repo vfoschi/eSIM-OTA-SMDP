@@ -1,3 +1,5 @@
+CREATE DATABASE queue;
+
 CREATE TABLE `updatequeue` (
 `id` BIGINT NOT NULL AUTO_INCREMENT,
 `imsi` varchar(15) NOT NULL,

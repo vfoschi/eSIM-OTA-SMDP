@@ -14,14 +14,14 @@ import { useRouteRefresh } from "../../utils";
 export default function QueueUpdate() {
   const [open, setOpen] = React.useState(false);
   const [imsi, setImsi] = React.useState("");
-  const [access_restriction, setAccess_Restriction] = React.useState("");
+  const [ue_ambr_ul, setUe_ambr_ul] = React.useState("");
   const [accountActive, setAccountActive] = React.useState("");
   const refreshRoute = useRouteRefresh();
 
   const handleClickOpen = () => {
     setImsi("");
     setAccountActive("");
-    setAccess_Restriction("");
+    setUe_ambr_ul("");
     setOpen(true);
   };
 
@@ -34,10 +34,10 @@ export default function QueueUpdate() {
       if (imsi === "") {
         throw new Error("can't do no input");
       }
-      await axios.post("/api/db/updatequeue", {
+      await axios.post("/queue/insert", {
         imsi,
         active: accountActive,
-        access_restriction,
+        ue_ambr_ul,
       });
     } catch (err) {
       console.log("err when updateUser is: " + err);
@@ -84,11 +84,11 @@ export default function QueueUpdate() {
                 <MenuItem value={"1"}>Active</MenuItem>
               </TextField>
               <TextField
-                label="access_restriction:"
-                id="access_restriction"
+                label="ue_ambr_ul:"
+                id="ue_ambr_ul"
                 type="number"
                 onChange={async (e: React.ChangeEvent<HTMLInputElement>) =>
-                  setAccess_Restriction(e.target.value)
+                  setUe_ambr_ul(e.target.value)
                 }
                 fullWidth
               />

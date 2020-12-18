@@ -23,7 +23,7 @@ export default function Routes() {
 
           <Route path={`${routes["PDNs"]}`} component={PDNs} />
 
-          <Route path={`${routes["Update Queue"]}`} component={UpdateQueue} />
+          <Route path={`${routes["Edge Server 1"]}`} component={UpdateQueue} />
 
           <Route path={`${routes["Setting"]}`} component={Setting} />
 

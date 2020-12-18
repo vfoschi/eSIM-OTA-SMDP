@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const useGetTableAPI = (
+  endpoint: string,
   tableName: string
 ): [Array<Array<string>>, boolean, boolean] => {
   const [data, setData] = useState([[""]]);
@@ -14,7 +15,7 @@ const useGetTableAPI = (
       setIsError(false);
       setIsLoading(true);
       try {
-        const res = await axios.get("/api/db/table/" + tableName);
+        const res = await axios.get(`/${endpoint}/db/table/${tableName}`);
         setData(res.data);
       } catch (err) {
         console.log("err is:" + err);
@@ -24,11 +25,12 @@ const useGetTableAPI = (
     }
 
     getData();
-  }, [tableName]);
+  }, [endpoint, tableName]);
   return [data, isLoading, isError];
 };
 
 const useGetColumnsAPI = (
+  endpoint: string,
   tableName: string
 ): [Array<string>, boolean, boolean] => {
   const [data, setData] = useState([""]);
@@ -40,7 +42,7 @@ const useGetColumnsAPI = (
       setIsError(false);
       setIsLoading(true);
       try {
-        const res = await axios.get("/api/db/columns/" + tableName);
+        const res = await axios.get(`/${endpoint}/db/columns/${tableName}`);
         setData(res.data);
       } catch (err) {
         console.log("err is:" + err);
@@ -50,7 +52,7 @@ const useGetColumnsAPI = (
     }
 
     getData();
-  }, [tableName]);
+  }, [endpoint, tableName]);
   return [data, isLoading, isError];
 };
 
